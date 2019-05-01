@@ -84,7 +84,6 @@ public class ImportAsyncTask extends AsyncTask<Uri, Void, Boolean> {
             Log.e(ImportAsyncTask.class.getName(), "" + exception.getMessage());
             Crashlytics.log("Could not open: " + uris[0].toString());
             Crashlytics.logException(exception);
-            exception.printStackTrace();
 
             final String err_msg = exception.getLocalizedMessage();
             Crashlytics.log(err_msg);
