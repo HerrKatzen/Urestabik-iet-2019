@@ -47,6 +47,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -132,6 +133,13 @@ public class OfxExporter extends Exporter{
     private String generateOfxExport() throws ExporterException {
         DocumentBuilderFactory docFactory = DocumentBuilderFactory
                 .newInstance();
+
+        try {
+            docFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
         DocumentBuilder docBuilder;
         try {
             docBuilder = docFactory.newDocumentBuilder();

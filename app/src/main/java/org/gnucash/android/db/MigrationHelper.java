@@ -69,6 +69,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -237,6 +238,13 @@ public class MigrationHelper {
      */
     static void importCommodities(SQLiteDatabase db) throws SAXException, ParserConfigurationException, IOException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
+
+        try {
+            spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
         SAXParser sp = spf.newSAXParser();
         XMLReader xr = sp.getXMLReader();
 

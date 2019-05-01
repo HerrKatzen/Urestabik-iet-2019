@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.util.zip.GZIPInputStream;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -48,6 +49,13 @@ public class GncXmlImporter {
      */
     public static String parse(InputStream gncXmlInputStream) throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
+
+        try {
+            spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
         SAXParser sp = spf.newSAXParser();
         XMLReader xr = sp.getXMLReader();
 
