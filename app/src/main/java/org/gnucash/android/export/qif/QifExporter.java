@@ -132,9 +132,6 @@ public class QifExporter extends Exporter{
                         }
                         if (!accountUID.equals(currentAccountUID)) {
                             // no need to end account
-                            //if (!currentAccountUID.equals("")) {
-                            //    // end last account
-                            //}
                             if (!currencyCode.equals(currentCurrencyCode)) {
                                 currentCurrencyCode = currencyCode;
                                 writer.append(QifHelper.INTERNAL_CURRENCY_PREFIX)

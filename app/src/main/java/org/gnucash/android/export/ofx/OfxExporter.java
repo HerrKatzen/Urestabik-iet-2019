@@ -228,6 +228,7 @@ public class OfxExporter extends Exporter{
      * Returns the MIME type for this exporter.
      * @return MIME type as string
      */
+    @Override
     public String getExportMimeType(){
         return "text/xml";
     }
