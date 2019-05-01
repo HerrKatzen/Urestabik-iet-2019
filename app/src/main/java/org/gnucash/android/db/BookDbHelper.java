@@ -172,10 +172,12 @@ public class BookDbHelper extends SQLiteOpenHelper {
 
         File nameFile = new File(newBasePath, "Book 1");
         try {
-            nameFile.createNewFile();
+            boolean success = nameFile.createNewFile();
+            if (!success) {
+                throw new IOException("function returned false");
+            }
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error creating name file for the database: " + nameFile.getName());
-            e.printStackTrace();
         }
     }
 
