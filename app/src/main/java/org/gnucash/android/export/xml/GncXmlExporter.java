@@ -776,25 +776,15 @@ public class GncXmlExporter extends Exporter{
 
     @Override
     public List<String> generateExport() throws ExporterException {
-        OutputStreamWriter writer = null;
         String outputFile = getExportCacheFilePath();
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-            writer = new OutputStreamWriter(bufferedOutputStream);
 
+        try(OutputStreamWriter writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(outputFile)))){
             generateExport(writer);
-        } catch (IOException ex){
+        }
+        catch (IOException ex){
             Crashlytics.log("Error exporting XML");
             Crashlytics.logException(ex);
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    throw new ExporterException(mExportParams, e);
-                }
-            }
+            throw new ExporterException(mExportParams, ex);
         }
 
         List<String> exportedFiles = new ArrayList<>();

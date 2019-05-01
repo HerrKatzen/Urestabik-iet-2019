@@ -171,22 +171,11 @@ public class OfxExporter extends Exporter{
         if (mAccountsList.isEmpty())
             return new ArrayList<>(); // Nothing to export, so no files generated
 
-        BufferedWriter writer = null;
-
-        try {
-            File file = new File(getExportCacheFilePath());
-            writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+        try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(getExportCacheFilePath()))))){
             writer.write(generateOfxExport());
-        } catch (IOException e) {
+        }
+        catch (IOException e){
             throw new ExporterException(mExportParams, e);
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    throw new ExporterException(mExportParams, e);
-                }
-            }
         }
 
         List<String> exportedFiles = new ArrayList<>();
