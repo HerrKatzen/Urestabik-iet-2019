@@ -323,6 +323,7 @@ public class Recurrence extends BaseModel {
                 break;
             default:
                 jodaPeriod = Months.months(multiple);
+                break;
         }
         int count = 0;
         LocalDateTime startTime = new LocalDateTime(mPeriodStart.getTime());

@@ -217,6 +217,7 @@ public class AccountPreferencesFragment extends PreferenceFragmentCompat impleme
                                 Toast.LENGTH_LONG).show();
                     }
                 }
+                break;
         }
     }
 }

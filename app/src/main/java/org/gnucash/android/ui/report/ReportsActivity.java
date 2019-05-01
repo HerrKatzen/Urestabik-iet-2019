@@ -152,6 +152,7 @@ public class ReportsActivity extends BaseDrawerActivity implements AdapterView.O
                         break;
                     case 1:
                         mAccountType = AccountType.INCOME;
+                        break;
                 }
                 updateAccountTypeOnFragments();
             }
