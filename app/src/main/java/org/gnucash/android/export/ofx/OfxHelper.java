@@ -80,7 +80,7 @@ public class OfxHelper {
     /**
      * ID which will be used as the bank ID for OFX from this app
      */
-    public static String APP_ID = "org.gnucash.android";
+    public static final String APP_ID = "org.gnucash.android";
 
     /**
      * Returns the current time formatted using the pattern in {@link #OFX_DATE_FORMATTER}
