@@ -302,7 +302,6 @@ public class BooksDbAdapter extends DatabaseAdapter<Book> {
         while (true) {
             Context context = GnuCashApplication.getAppContext();
             String name = context.getString(R.string.book_default_name, bookCount);
-            //String name = "Book" + " " + bookCount;
 
             statement.clearBindings();
             statement.bindString(1, name);

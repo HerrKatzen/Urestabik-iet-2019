@@ -705,7 +705,7 @@ public class MigrationHelper {
             } finally {
                 cursor.close();
             }
-            //String rootAccountUID = accountsDbAdapter.getOrCreateGnuCashRootAccountUID();
+
             contentValues.clear();
             contentValues.put(AccountEntry.COLUMN_PARENT_ACCOUNT_UID, rootAccountUID);
             db.update(AccountEntry.TABLE_NAME, contentValues, AccountEntry.COLUMN_PARENT_ACCOUNT_UID + " IS NULL AND " + AccountEntry.COLUMN_TYPE + " != ?", new String[]{"ROOT"});
@@ -719,13 +719,6 @@ public class MigrationHelper {
                 contentValues.put(TransactionEntry.COLUMN_CREATED_AT, TimestampHelper.getUtcStringFromTimestamp(timestampT));
                 long transactionId = cursor.getLong(cursor.getColumnIndexOrThrow(TransactionEntry._ID));
                 db.update(TransactionEntry.TABLE_NAME, contentValues, TransactionEntry._ID + "=" + transactionId, null);
-
-                //ScheduledAction scheduledAction = new ScheduledAction(ScheduledAction.ActionType.TRANSACTION);
-                //scheduledAction.setActionUID(cursor.getString(cursor.getColumnIndexOrThrow(TransactionEntry.COLUMN_UID)));
-                //long period = cursor.getLong(cursor.getColumnIndexOrThrow("recurrence_period"));
-                //scheduledAction.setPeriod(period);
-                //scheduledAction.setStartTime(timestampT.getTime()); //the start time is when the transaction was created
-                //scheduledAction.setLastRun(System.currentTimeMillis()); //prevent this from being executed at the end of migration
 
                 contentValues.clear();
                 contentValues.put(CommonColumns.COLUMN_UID, BaseModel.generateUID());

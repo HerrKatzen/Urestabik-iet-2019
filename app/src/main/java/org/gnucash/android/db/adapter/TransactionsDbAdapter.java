@@ -282,7 +282,6 @@ public class TransactionsDbAdapter extends DatabaseAdapter<Transaction> {
         String[] projectionIn = new String[]{TransactionEntry.TABLE_NAME + ".*",
                 ScheduledActionEntry.TABLE_NAME+"."+ScheduledActionEntry.COLUMN_UID + " AS " + "origin_scheduled_action_uid"};
         String sortOrder = TransactionEntry.TABLE_NAME + "." + TransactionEntry.COLUMN_DESCRIPTION + " ASC";
-//        queryBuilder.setDistinct(true);
 
         return queryBuilder.query(mDb, projectionIn, null, null, null, null, sortOrder);
     }
@@ -367,6 +366,7 @@ public class TransactionsDbAdapter extends DatabaseAdapter<Transaction> {
      * Return number of transactions in the database (excluding templates)
      * @return Number of transactions
      */
+    @Override
     public long getRecordsCount() {
         String queryCount = "SELECT COUNT(*) FROM " + TransactionEntry.TABLE_NAME +
                 " WHERE " + TransactionEntry.COLUMN_TEMPLATE + " =0";
@@ -513,8 +513,6 @@ public class TransactionsDbAdapter extends DatabaseAdapter<Transaction> {
      * @return Number of splits belonging to the transaction
      */
     public long getSplitCount(@NonNull String transactionUID){
-        if (transactionUID == null)
-            return 0;
         String sql = "SELECT COUNT(*) FROM " + SplitEntry.TABLE_NAME
                 + " WHERE " + SplitEntry.COLUMN_TRANSACTION_UID + "= '" + transactionUID + "'";
         SQLiteStatement statement = mDb.compileStatement(sql);
