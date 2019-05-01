@@ -172,19 +172,15 @@ public class MigrationHelper {
     static void moveFile(File src, File dst) throws IOException {
         Log.d(LOG_TAG, String.format(Locale.US, "Moving %s from %s to %s",
                 src.getName(), src.getParent(), dst.getParent()));
-        FileChannel inChannel = new FileInputStream(src).getChannel();
-        FileChannel outChannel = new FileOutputStream(dst).getChannel();
-        try {
+        try(FileChannel inChannel = new FileInputStream(src).getChannel();
+            FileChannel outChannel = new FileOutputStream(dst).getChannel()){
+
             long bytesCopied = inChannel.transferTo(0, inChannel.size(), outChannel);
             if(bytesCopied >= src.length()) {
                 boolean result = src.delete();
                 String msg = result ? "Deleted src file: " : "Could not delete src: ";
                 Log.d(LOG_TAG, msg + src.getPath());
             }
-        } finally {
-            if (inChannel != null)
-                inChannel.close();
-            outChannel.close();
         }
     }
 
@@ -1570,22 +1566,19 @@ public class MigrationHelper {
             public void run() {
                 File srcDir = new File(Exporter.LEGACY_BASE_FOLDER_PATH);
                 File dstDir = new File(Exporter.BASE_FOLDER_PATH);
-                try {
+                try(FileWriter writer = new FileWriter(new File(Exporter.LEGACY_BASE_FOLDER_PATH, "README.txt"))){
                     moveDirectory(srcDir, dstDir);
-                    File readmeFile = new File(Exporter.LEGACY_BASE_FOLDER_PATH, "README.txt");
-                    FileWriter writer = null;
-                    writer = new FileWriter(readmeFile);
                     writer.write("Backup files have been moved to " + dstDir.getPath() +
                             "\nYou can now delete this folder");
                     writer.flush();
-                } catch (IOException | IllegalArgumentException ex) {
+                }
+                catch (IOException | IllegalArgumentException ex){
                     ex.printStackTrace();
                     String msg = String.format("Error moving files from %s to %s", srcDir.getPath(), dstDir.getPath());
                     Log.e(LOG_TAG, msg);
                     Crashlytics.log(msg);
                     Crashlytics.logException(ex);
                 }
-
             }
         }).start();
 

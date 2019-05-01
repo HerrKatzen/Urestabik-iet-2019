@@ -306,6 +306,7 @@ public class ExportAsyncTask extends AsyncTask<ExportParams, Void, Boolean> {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
         String folderId = sharedPreferences.getString(mContext.getString(R.string.key_google_drive_app_folder_id), "");
         DriveFolder folder = DriveId.decodeFromString(folderId).asDriveFolder();
+        FileInputStream fileInputStream = null;
         try {
             for (String exportedFilePath : mExportedFiles) {
                 DriveApi.DriveContentsResult driveContentsResult =
@@ -317,7 +318,7 @@ public class ExportAsyncTask extends AsyncTask<ExportParams, Void, Boolean> {
                 final DriveContents driveContents = driveContentsResult.getDriveContents();
                 OutputStream outputStream = driveContents.getOutputStream();
                 File exportedFile = new File(exportedFilePath);
-                FileInputStream fileInputStream = new FileInputStream(exportedFile);
+                fileInputStream = new FileInputStream(exportedFile);
                 byte[] buffer = new byte[1024];
                 int count;
 
@@ -343,6 +344,15 @@ public class ExportAsyncTask extends AsyncTask<ExportParams, Void, Boolean> {
             }
         } catch (IOException e) {
             throw new Exporter.ExporterException(mExportParams, e);
+        }
+        finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
