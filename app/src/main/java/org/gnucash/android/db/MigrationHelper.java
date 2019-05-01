@@ -238,7 +238,7 @@ public class MigrationHelper {
         try {
             spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            Log.i("DocumentBuilderFactory", "failed to set FEATURE_SECURE_PROCESSING feature");
         }
 
         SAXParser sp = spf.newSAXParser();
@@ -1572,8 +1572,7 @@ public class MigrationHelper {
                             "\nYou can now delete this folder");
                     writer.flush();
                 }
-                catch (IOException | IllegalArgumentException ex){
-                    ex.printStackTrace();
+                catch (IOException | IllegalArgumentException ex) {
                     String msg = String.format("Error moving files from %s to %s", srcDir.getPath(), dstDir.getPath());
                     Log.e(LOG_TAG, msg);
                     Crashlytics.log(msg);

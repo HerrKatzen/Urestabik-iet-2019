@@ -359,7 +359,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MigrationHelper.importCommodities(db);
         } catch (SAXException | ParserConfigurationException | IOException e) {
             Log.e(LOG_TAG, "Error loading currencies into the database");
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
