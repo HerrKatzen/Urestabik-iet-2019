@@ -227,7 +227,7 @@ public class TransferFundsDialogFragment extends DialogFragment {
             price.setValueDenom(mOriginAmount.getNumerator() * mConvertedAmount.getDenominator());
         }
 
-        price.setSource(Price.SOURCE_USER);
+        if (price!=null) price.setSource(Price.SOURCE_USER);
         PricesDbAdapter.getInstance().addRecord(price);
 
         if (mOnTransferFundsListener != null)

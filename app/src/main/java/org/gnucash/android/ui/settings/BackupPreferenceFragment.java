@@ -467,15 +467,16 @@ public class BackupPreferenceFragment extends PreferenceFragmentCompat implement
 						takeFlags = data.getFlags()
 								& (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 					}
+					if (backupFileUri != null){
+						getActivity().getContentResolver().takePersistableUriPermission(backupFileUri, takeFlags);
+						PreferenceActivity.getActiveBookSharedPreferences()
+								.edit()
+								.putString(BackupManager.KEY_BACKUP_FILE, backupFileUri.toString())
+								.apply();
 
-					getActivity().getContentResolver().takePersistableUriPermission(backupFileUri, takeFlags);
-					PreferenceActivity.getActiveBookSharedPreferences()
-							.edit()
-							.putString(BackupManager.KEY_BACKUP_FILE, backupFileUri.toString())
-							.apply();
-
-					Preference pref = findPreference(getString(R.string.key_backup_location));
-					pref.setSummary(backupFileUri.getAuthority());
+						Preference pref = findPreference(getString(R.string.key_backup_location));
+						pref.setSummary(backupFileUri.getAuthority());
+					}
 				}
 				break;
 		}
