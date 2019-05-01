@@ -574,12 +574,12 @@ public class ExportFormFragment extends Fragment implements
 
 			case REQUEST_EXPORT_FILE:
 				if (resultCode == Activity.RESULT_OK){
+					int takeFlags = 0;
 					if (data != null){
 						mExportUri = data.getData();
+						takeFlags = data.getFlags()
+								& (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 					}
-
-					final int takeFlags = data.getFlags()
-							& (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 					getActivity().getContentResolver().takePersistableUriPermission(mExportUri, takeFlags);
 
 					mTargetUriTextView.setText(mExportUri.toString());
