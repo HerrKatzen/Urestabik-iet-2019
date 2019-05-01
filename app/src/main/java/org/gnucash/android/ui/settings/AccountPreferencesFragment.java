@@ -218,6 +218,7 @@ public class AccountPreferencesFragment extends PreferenceFragmentCompat impleme
                         Thread.currentThread().interrupt();
                     }
                 }
+                break;
         }
     }
 }

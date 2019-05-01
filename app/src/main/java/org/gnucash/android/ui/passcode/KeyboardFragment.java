@@ -137,6 +137,7 @@ public class KeyboardFragment extends Fragment {
                     case 4:
                         pass4.setText(null);
                         length--;
+                        break;
                 }
             }
         });
@@ -184,6 +185,7 @@ public class KeyboardFragment extends Fragment {
                         length = 0;
                     }
                 }, DELAY);
+                break;
         }
     }
 
