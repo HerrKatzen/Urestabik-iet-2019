@@ -39,6 +39,7 @@ import org.gnucash.android.ui.settings.PreferenceActivity;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -104,7 +105,7 @@ public class BackupManager {
      * @return {@code true} if backup was successful, {@code false} otherwise
      */
     public static boolean backupBook(String bookUID){
-        OutputStream outputStream;
+        OutputStream outputStream = null;
         try {
             String backupFile = getBookBackupFileUri(bookUID);
             if (backupFile != null){
@@ -113,19 +114,31 @@ public class BackupManager {
                 backupFile = getBackupFilePath(bookUID);
                 outputStream = new FileOutputStream(backupFile);
             }
-
-            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
-            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(bufferedOutputStream);
-            OutputStreamWriter writer = new OutputStreamWriter(gzipOutputStream);
-
-            ExportParams params = new ExportParams(ExportFormat.XML);
-            new GncXmlExporter(params).generateExport(writer);
-            writer.close();
-            return true;
-        } catch (IOException | Exporter.ExporterException e) {
-            Crashlytics.logException(e);
-            Log.e("GncXmlExporter", "Error creating XML  backup", e);
+            try(OutputStreamWriter writer = new OutputStreamWriter(new GZIPOutputStream(new BufferedOutputStream(outputStream)))){
+                ExportParams params = new ExportParams(ExportFormat.XML);
+                new GncXmlExporter(params).generateExport(writer);
+                writer.close();
+                return true;
+            }
+            catch (IOException | Exporter.ExporterException ex){
+                Crashlytics.logException(ex);
+                Log.e("GncXmlExporter", "Error creating XML  backup", ex);
+                return false;
+            }
+        }
+        catch (FileNotFoundException ex){
+            Crashlytics.logException(ex);
+            Log.e("GncXmlExporter", "Error creating XML  backup", ex);
             return false;
+        }
+        finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

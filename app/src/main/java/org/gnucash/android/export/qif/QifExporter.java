@@ -280,30 +280,36 @@ public class QifExporter extends Exporter{
         String[] pathParts = file.getPath().split("(?=\\.[^\\.]+$)");
         ArrayList<String> splitFiles = new ArrayList<>();
         String line;
-        BufferedReader in = new BufferedReader(new FileReader(file));
-        BufferedWriter out = null;
-        try {
-            while ((line = in.readLine()) != null) {
-                if (line.startsWith(QifHelper.INTERNAL_CURRENCY_PREFIX)) {
-                    String currencyCode = line.substring(1);
-                    if (out != null) {
-                        out.close();
+
+        try (BufferedReader in = new BufferedReader(new FileReader(file))) {
+            BufferedWriter out = null;
+            try{
+                while ((line = in.readLine()) != null) {
+                    if (line.startsWith(QifHelper.INTERNAL_CURRENCY_PREFIX)) {
+                        String currencyCode = line.substring(1);
+                        if (out != null) {
+                            out.close();
+                        }
+                        String newFileName = pathParts[0] + "_" + currencyCode + pathParts[1];
+                        splitFiles.add(newFileName);
+                        out = new BufferedWriter(new FileWriter(newFileName));
+                    } else {
+                        if (out == null) {
+                            throw new IllegalArgumentException(file.getPath() + " format is not correct");
+                        }
+                        out.append(line).append('\n');
                     }
-                    String newFileName = pathParts[0] + "_" + currencyCode + pathParts[1];
-                    splitFiles.add(newFileName);
-                    out = new BufferedWriter(new FileWriter(newFileName));
-                } else {
-                    if (out == null) {
-                        throw new IllegalArgumentException(file.getPath() + " format is not correct");
-                    }
-                    out.append(line).append('\n');
                 }
             }
-        } finally {
-            in.close();
-            if (out != null) {
-                out.close();
+            catch (Exception ex){
+                ex.printStackTrace();
             }
+            finally {
+                if (out != null) {
+                    out.close();
+                }
+            }
+
         }
         return splitFiles;
     }
