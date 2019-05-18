@@ -135,8 +135,8 @@ public class OfxExporter extends Exporter{
                 .newInstance();
 
         try {
-            docFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        } catch (ParserConfigurationException e) {
+            // docFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (Exception e) {
             Log.i("DocumentBuilderFactory", "failed to set FEATURE_SECURE_PROCESSING feature");
         }
 
@@ -203,10 +203,10 @@ public class OfxExporter extends Exporter{
             TransformerFactory transformerFactory = TransformerFactory
                     .newInstance();
 
-            transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            // transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 
             Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            // transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
             DOMSource source = new DOMSource(node);
             StreamResult result = new StreamResult(outputWriter);

@@ -51,8 +51,8 @@ public class GncXmlImporter {
         SAXParserFactory spf = SAXParserFactory.newInstance();
 
         try {
-            spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        } catch (ParserConfigurationException e) {
+            // spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (Exception e) {
             Log.i("DocumentBuilderFactory", "failed to set FEATURE_SECURE_PROCESSING feature");
         }
 
